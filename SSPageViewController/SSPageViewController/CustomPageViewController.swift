@@ -13,6 +13,7 @@ class CustomPageViewController: SSPageViewController {
         case custom
         case refresh
         case headerScale
+        case noHeader
     }
     private var tabType: TabType
     private var titles = ["select1", "select2", "select3", "select4", "select5", "select6", "select7", "select8", "select9", "select10", "select11"]
@@ -38,7 +39,13 @@ class CustomPageViewController: SSPageViewController {
                 return vc
             })
             setViewControllers(viewControllers: viewControllers, titles: titles, headerView: headerView)
-            
+        case .noHeader:
+            let viewControllers = titles.map({
+                title -> SSPageChildViewController in
+                let vc = DemoViewController(text: "default: \(title)")
+                return vc
+            })
+            setViewControllers(viewControllers: viewControllers, titles: titles, headerView: nil)
         case .custom:
             let viewControllers = titles.map({
                 title -> SSPageChildViewController in
@@ -65,6 +72,7 @@ class CustomPageViewController: SSPageViewController {
             })
             let headerView = CustomImageHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 350))
             setViewControllers(viewControllers: viewControllers, titles: titles, headerView: headerView)
+            
         }
         // Do any additional setup after loading the view.
     }
@@ -82,7 +90,7 @@ class CustomPageViewController: SSPageViewController {
 
 }
 
-class CustomHeaderView: UIView, SSPageHeaderDelegate {
+class CustomHeaderView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.random

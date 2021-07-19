@@ -293,7 +293,7 @@ class SSPageViewController: UIViewController {
     
     
     private var tabView: (UIView & SSPageTabSelectedDelegate)?
-    private lazy var headerView: (UIView & SSPageHeaderDelegate)? = nil
+    private lazy var headerView: UIView? = nil
     private var currentViewControllers: [UIViewController]? = nil
     private var willTransitionToViewController: UIViewController? = nil
     private var lastContainerScrollViewOffsetY: CGFloat = 0
@@ -390,7 +390,7 @@ class SSPageViewController: UIViewController {
                 
                 let topY = (headerView?.frame.height ?? 0) - containerScrollView.topMargin
                 if let newOffset = change?[.newKey] as? CGPoint, let OldOffset = change?[.oldKey] as? CGPoint {
-                    if let headerView = self.headerView, newOffset.y < -containerScrollView.topMargin {
+                    if let headerView = self.headerView as? SSPageHeaderDelegate, newOffset.y < -containerScrollView.topMargin {
                         headerView.scrollDistanceFromTop(distance: abs(newOffset.y) - containerScrollView.topMargin)
                     }
                     
@@ -408,7 +408,7 @@ class SSPageViewController: UIViewController {
                             /// 当子视图滑动到底部，containerscrollview不动
                             if let currentViewController = currentViewController as? SSPageChildViewController {
                                 if let scrollView = currentViewController.childContainerView() {
-                                    if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height  {
+                                    if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height && self.headerView != nil  {
                                         containerScrollView.contentOffset = CGPoint(x: 0, y: containerScrollView.contentSize.height - containerScrollView.frame.height + containerScrollView.bottomMargin)
                                     }
                                     
@@ -439,7 +439,7 @@ class SSPageViewController: UIViewController {
                                     tabView.frame = CGRect(x: 0, y: newOffset.y + containerScrollView.topMargin, width: tabView.frame.width, height: tabView.frame.height)
                                 }
                             }
-                            if isSupportHeaderRefresh &&  containerScrollView.contentOffset.y < -containerScrollView.topMargin  {
+                            if (isSupportHeaderRefresh || self.headerView == nil) &&  containerScrollView.contentOffset.y < -containerScrollView.topMargin  {
                                 
                                 containerScrollView.contentOffset = CGPoint(x: 0, y: -containerScrollView.topMargin)
                             }
@@ -533,16 +533,18 @@ class SSPageViewController: UIViewController {
     
     func setViewControllers(viewControllers: [SSPageChildViewController],
                             titles: [String],
-                            headerView: (UIView & SSPageHeaderDelegate)? = nil) {
+                            headerView: UIView? = nil) {
         let pageTab = SSDefaultPageTabView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 40))
         pageTab.titles = titles
         setViewControllers(viewControllers: viewControllers, tabView: pageTab, headerView: headerView)
     }
     
-    func setViewControllers(viewControllers: [SSPageChildViewController], tabView: UIView & SSPageTabSelectedDelegate, headerView: (UIView & SSPageHeaderDelegate)? = nil) {
+    func setViewControllers(viewControllers: [SSPageChildViewController], tabView: UIView & SSPageTabSelectedDelegate, headerView: UIView? = nil) {
         if let headerView = headerView {
             containerScrollView.addSubview(headerView)
             self.headerView = headerView
+        } else {
+            isSupportHeaderRefresh = true
         }
         containerScrollView.addSubview(tabView)
         self.tabView = tabView

@@ -12,7 +12,8 @@ class ViewController: UITableViewController {
     private var demos = [(String, Selector)]()
     override func viewDidLoad() {
         super.viewDidLoad()
-        demos = [("默认Tab", #selector(defaultTabs)),
+        demos = [("没有header默认Tab", #selector(noHeaderDefaultTabs)),
+                 ("默认Tab", #selector(defaultTabs)),
                  ("自定义Tab", #selector(customTabs)),
                  ("支持下拉刷新", #selector(refresh)),
                  ("头部图片扩大", #selector(headerViewScale))]
@@ -20,6 +21,10 @@ class ViewController: UITableViewController {
         // Do any additional setup after loading the view.
     }
     
+    @objc func noHeaderDefaultTabs() {
+        let vc = CustomPageViewController(tabType: .noHeader)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
     
     @objc func defaultTabs() {
         let vc = CustomPageViewController(tabType: .default)
