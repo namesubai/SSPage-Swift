@@ -1,6 +1,7 @@
 # SSPageViewController
 使用UIPageViewController实现的简单易用的界面切换组件
 # 支持功能
+- 有毛玻璃穿透效果
 - 自定义tab
 - 可以根据tab滑动百分比回调自定义动画
 - 自定义头部header
