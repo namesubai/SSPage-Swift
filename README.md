@@ -9,8 +9,8 @@
 # 效果
 <img src="https://github.com/namesubai/SSPageViewController/blob/main/默认tab.gif" width = 20% height = 20% /><img src="https://github.com/namesubai/SSPageViewController/blob/main/自定义tab.gif" width = 20% height = 20% /><img src="https://github.com/namesubai/SSPageViewController/blob/main/上下拉刷新.gif" width = 20% height = 20% /><img src="https://github.com/namesubai/SSPageViewController/blob/main/头部图片放大.gif" width = 20% height = 20% />
 # 使用
-1. 导入SSPageViewController，继承SSPageViewController
-## 2. 添加子控制器
+### 1. 导入SSPageViewController，继承SSPageViewController
+### 2. 添加子控制器
 初始化子控制器：
 extension DemoViewController: SSPageChildDelegate {
     
