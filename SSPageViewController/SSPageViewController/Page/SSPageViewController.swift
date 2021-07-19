@@ -280,7 +280,7 @@ class SSPageViewController: UIViewController {
     
     private(set) lazy var containerScrollView: SSPageContainerScrollView = {
         let scrollView = SSPageContainerScrollView()
-        scrollView.backgroundColor = .yellow
+//        scrollView.backgroundColor = .yellow
         return scrollView
     }()
     
