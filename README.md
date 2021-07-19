@@ -7,7 +7,7 @@
 - 可以根据头部滑动距离百分比回调自定义动画
 - 下拉上拉刷新
 # 效果
-<img src="https://github.com/namesubai/SSPageViewController/blob/main/默认tab.gif" width = 20% height = 20% /><img src="https://github.com/namesubai/SSPageViewController/blob/main/自定义tab.gif" width = 20% height = 20% /><img src="https://github.com/namesubai/SSPageViewController/blob/main/上下拉刷新.gif" width = 20% height = 20% /><img src="https://github.com/namesubai/SSPageViewController/blob/main/头部图片放大.gif" width = 20% height = 20% />
+<img src="https://github.com/namesubai/SSPageViewController/blob/main/不带header.gif" width = 20% height = 20% /><img <img src="https://github.com/namesubai/SSPageViewController/blob/main/默认tab.gif" width = 20% height = 20% /><img src="https://github.com/namesubai/SSPageViewController/blob/main/自定义tab.gif" width = 20% height = 20% /><img src="https://github.com/namesubai/SSPageViewController/blob/main/上下拉刷新.gif" width = 20% height = 20% /><img src="https://github.com/namesubai/SSPageViewController/blob/main/头部图片放大.gif" width = 20% height = 20% />
 # 使用
 ### 1. 导入SSPageViewController，继承SSPageViewController
 ### 2. 添加子控制器
