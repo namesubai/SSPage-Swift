@@ -7,9 +7,8 @@
 - 可以根据头部滑动距离百分比回调自定义动画
 - 下拉上拉刷新
 # 效果
-[![](https://github.com/namesubai/SSPageViewController/blob/main/默认tab.gif)]
-[![](https://github.com/namesubai/SSPageViewController/blob/main/自定义tab.gif)]
-[![](https://github.com/namesubai/SSPageViewController/blob/main/上下拉刷新.gif)]
-[![](https://github.com/namesubai/SSPageViewController/blob/main/头部图片放大.gif)]
-
+<img src="https://github.com/namesubai/SSPageViewController/blob/main/默认tab.gif" width = 20% height = 20% />
+<img src="https://github.com/namesubai/SSPageViewController/blob/main/自定义tab.gif" width = 20% height = 20% />
+<img src="https://github.com/namesubai/SSPageViewController/blob/main/上下拉刷新.gif" width = 20% height = 20% />
+<img src="https://github.com/namesubai/SSPageViewController/blob/main/头部图片放大.gif" width = 20% height = 20% />
 
