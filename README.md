@@ -7,5 +7,8 @@
 - 可以根据头部滑动距离百分比回调自定义动画
 - 下拉上拉刷新
 # 效果
-
+<img src="https://github.com/namesubai/SSProgressHUDDemo/blob/master/loadingGif.gif" width = 20% height = 20% />
+<img src="https://github.com/namesubai/SSProgressHUDDemo/blob/master/showTextGif.gif" width = 20% height = 20% />
+<img src="https://github.com/namesubai/SSProgressHUDDemo/blob/master/showImage.gif" width = 20% height = 20% />
+<img src="https://github.com/namesubai/SSProgressHUDDemo/blob/master/progressGif.gif" width = 20% height = 20% />
 
