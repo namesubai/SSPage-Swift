@@ -113,7 +113,8 @@ class ChildVC: SSPageChildDelegate {
 
 ### 2. 头部图片放大
 
-自定义header
+自定义header, 实现SSPageHeaderDelegate，在回调方法scrollDistanceFromTop控制图片变化
+```
 class CustomImageHeaderView: UIView, SSPageHeaderDelegate {
     
     private lazy var bgImageView: UIImageView = {
@@ -154,7 +155,7 @@ class CustomImageHeaderView: UIView, SSPageHeaderDelegate {
     }
 }
 
-
+```
 
 
 
