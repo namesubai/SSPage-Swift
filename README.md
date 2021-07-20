@@ -13,6 +13,7 @@
 ### 1. 导入SSPageViewController，继承SSPageViewController
 ### 2. 添加子控制器
 初始化子控制器：
+```
 extension DemoViewController: SSPageChildDelegate {
     
     func childContainerView() -> UIScrollView? {
@@ -28,7 +29,7 @@ extension DemoViewController: SSPageChildDelegate {
         return tableView.mj_footer!.state == .refreshing ? false : true
     }
 }
-
+```
 ### 1.默认自带tab
 ```
 
