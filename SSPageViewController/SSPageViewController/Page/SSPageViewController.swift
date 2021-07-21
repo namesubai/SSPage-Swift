@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol SSPageHeaderDelegate {
+public protocol SSPageHeaderDelegate {
     func scrollDistanceFromTop(distance: CGFloat)
 }
 
@@ -18,8 +18,8 @@ extension SSPageHeaderDelegate {
 }
 
 
-typealias SSPageSelectEvent = (Int) -> Void
-protocol SSPageTabSelectedDelegate {
+public typealias SSPageSelectEvent = (Int) -> Void
+public protocol SSPageTabSelectedDelegate {
     func selectTab(index: Int)
     var currentIndex: Int { get set }
     var tabSelectedTrigger: SSPageSelectEvent? { get set }
@@ -234,7 +234,7 @@ private class SSDefaultPageTabView: UIView, SSPageTabSelectedDelegate {
 }
 
 
-protocol SSPageChildDelegate {
+public protocol SSPageChildDelegate {
     func childContainerView() -> UIScrollView?
     /// 滑动到底部触发，当isSupportContainerScrollFooterRefresh = true 会回调
     func containerScrollFooterRefresh()
@@ -253,7 +253,7 @@ extension SSPageChildDelegate {
 
 }
 
-typealias SSPageChildViewController = UIViewController & SSPageChildDelegate
+public typealias SSPageChildViewController = UIViewController & SSPageChildDelegate
 
 
 class SSPageContainerScrollView: UIScrollView, UIGestureRecognizerDelegate {
@@ -531,7 +531,7 @@ open class SSPageViewController: UIViewController {
     }
  
     
-    func setViewControllers(viewControllers: [SSPageChildViewController],
+    public func setViewControllers(viewControllers: [SSPageChildViewController],
                             titles: [String],
                             headerView: UIView? = nil) {
         let pageTab = SSDefaultPageTabView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 40))
@@ -539,7 +539,7 @@ open class SSPageViewController: UIViewController {
         setViewControllers(viewControllers: viewControllers, tabView: pageTab, headerView: headerView)
     }
     
-    func setViewControllers(viewControllers: [SSPageChildViewController], tabView: UIView & SSPageTabSelectedDelegate, headerView: UIView? = nil) {
+    public func setViewControllers(viewControllers: [SSPageChildViewController], tabView: UIView & SSPageTabSelectedDelegate, headerView: UIView? = nil) {
         if let headerView = headerView {
             containerScrollView.addSubview(headerView)
             self.headerView = headerView
