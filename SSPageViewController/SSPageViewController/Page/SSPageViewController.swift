@@ -276,7 +276,7 @@ class SSPageContainerScrollView: UIScrollView, UIGestureRecognizerDelegate {
 }
 
 
-class SSPageViewController: UIViewController {
+open class SSPageViewController: UIViewController {
     
     private(set) lazy var containerScrollView: SSPageContainerScrollView = {
         let scrollView = SSPageContainerScrollView()
@@ -347,7 +347,7 @@ class SSPageViewController: UIViewController {
     /// 滑动底部触发刷新距离
     var supportContainerScrollFooterRefreshDistance: CGFloat = 2
 
-    override func viewDidLayoutSubviews() {
+    open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         containerScrollView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
@@ -366,7 +366,7 @@ class SSPageViewController: UIViewController {
         pageViewController.view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height + (headerView?.frame.height ?? 0) - containerScrollView.topMargin)
     }
     
-    override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
 //        containerScrollView.backgroundColor = .yellow
@@ -384,7 +384,7 @@ class SSPageViewController: UIViewController {
         }
     }
     
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if (object as? SSPageContainerScrollView) != nil {
             if keyPath == "contentOffset" {
                 
@@ -655,7 +655,7 @@ class SSPageViewController: UIViewController {
 
 
 extension SSPageViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+    public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         ///向前
         guard let viewControllers = self.currentViewControllers else {
             return nil
@@ -670,7 +670,7 @@ extension SSPageViewController: UIPageViewControllerDataSource, UIPageViewContro
         return nil
     }
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+    public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         ///向后
         guard let viewControllers = self.currentViewControllers else {
             return nil
@@ -685,7 +685,7 @@ extension SSPageViewController: UIPageViewControllerDataSource, UIPageViewContro
         return nil
     }
     
-    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+    public func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if let willTransitionToViewController = willTransitionToViewController, completed == true {
             if let index = currentViewControllers?.firstIndex(of: willTransitionToViewController), willTransitionToViewController != previousViewControllers.first {
                 selectedPageNum = index
@@ -693,7 +693,7 @@ extension SSPageViewController: UIPageViewControllerDataSource, UIPageViewContro
         }
     }
     
-    func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
+    public func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
         willTransitionToViewController = pendingViewControllers.first
         resetChildViewArea(viewController: willTransitionToViewController)
     }
