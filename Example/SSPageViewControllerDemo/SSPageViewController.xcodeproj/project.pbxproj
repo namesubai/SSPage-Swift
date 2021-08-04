@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,7 +14,6 @@
 		2B9DF31B26993A0500E5CCF7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B9DF31926993A0500E5CCF7 /* Main.storyboard */; };
 		2B9DF31D26993A0600E5CCF7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B9DF31C26993A0600E5CCF7 /* Assets.xcassets */; };
 		2B9DF32026993A0600E5CCF7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B9DF31E26993A0600E5CCF7 /* LaunchScreen.storyboard */; };
-		2B9DF32926993A6000E5CCF7 /* SSPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9DF32826993A6000E5CCF7 /* SSPageViewController.swift */; };
 		2B9DF32B26994D8600E5CCF7 /* CustomPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9DF32A26994D8600E5CCF7 /* CustomPageViewController.swift */; };
 		2B9DF32D269952AA00E5CCF7 /* DemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9DF32C269952AA00E5CCF7 /* DemoViewController.swift */; };
 		2B9DF32F2699587100E5CCF7 /* UIColorExtentsion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9DF32E2699587100E5CCF7 /* UIColorExtentsion.swift */; };
@@ -29,7 +28,6 @@
 		2B9DF31C26993A0600E5CCF7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2B9DF31F26993A0600E5CCF7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2B9DF32126993A0600E5CCF7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2B9DF32826993A6000E5CCF7 /* SSPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSPageViewController.swift; sourceTree = "<group>"; };
 		2B9DF32A26994D8600E5CCF7 /* CustomPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPageViewController.swift; sourceTree = "<group>"; };
 		2B9DF32C269952AA00E5CCF7 /* DemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoViewController.swift; sourceTree = "<group>"; };
 		2B9DF32E2699587100E5CCF7 /* UIColorExtentsion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtentsion.swift; sourceTree = "<group>"; };
@@ -56,7 +54,6 @@
 				D35DBF9D84B81B2FB1D328CC /* Pods-SSPageViewController.debug.xcconfig */,
 				9F27379B45E82BBFECF3AD75 /* Pods-SSPageViewController.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -81,7 +78,6 @@
 		2B9DF31226993A0500E5CCF7 /* SSPageViewController */ = {
 			isa = PBXGroup;
 			children = (
-				2B9DF32726993A2300E5CCF7 /* Page */,
 				2B9DF31326993A0500E5CCF7 /* AppDelegate.swift */,
 				2B9DF31526993A0500E5CCF7 /* SceneDelegate.swift */,
 				2B9DF31726993A0500E5CCF7 /* ViewController.swift */,
@@ -94,14 +90,6 @@
 				2B9DF32126993A0600E5CCF7 /* Info.plist */,
 			);
 			path = SSPageViewController;
-			sourceTree = "<group>";
-		};
-		2B9DF32726993A2300E5CCF7 /* Page */ = {
-			isa = PBXGroup;
-			children = (
-				2B9DF32826993A6000E5CCF7 /* SSPageViewController.swift */,
-			);
-			path = Page;
 			sourceTree = "<group>";
 		};
 		C7F940385EC5767EC76A0278 /* Frameworks */ = {
@@ -231,7 +219,6 @@
 				2B9DF31626993A0500E5CCF7 /* SceneDelegate.swift in Sources */,
 				2B9DF32D269952AA00E5CCF7 /* DemoViewController.swift in Sources */,
 				2B9DF32B26994D8600E5CCF7 /* CustomPageViewController.swift in Sources */,
-				2B9DF32926993A6000E5CCF7 /* SSPageViewController.swift in Sources */,
 				2B9DF32F2699587100E5CCF7 /* UIColorExtentsion.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

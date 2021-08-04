@@ -34,21 +34,21 @@ class CustomPageViewController: SSPageViewController {
         switch tabType {
         case .default:
             let viewControllers = titles.map({
-                title -> SSPageChildViewController in
+                title -> SSPageChildDelegate in
                 let vc = DemoViewController(text: "default: \(title)")
                 return vc
             })
             setViewControllers(viewControllers: viewControllers, titles: titles, headerView: headerView)
         case .noHeader:
             let viewControllers = titles.map({
-                title -> SSPageChildViewController in
+                title -> SSPageChildDelegate in
                 let vc = DemoViewController(text: "default: \(title)")
                 return vc
             })
             setViewControllers(viewControllers: viewControllers, titles: titles, headerView: nil)
         case .custom:
             let viewControllers = titles.map({
-                title -> SSPageChildViewController in
+                title -> SSPageChildDelegate in
                 let vc = DemoViewController(text: "custom: \(title)")
                 return vc
             })
@@ -56,17 +56,16 @@ class CustomPageViewController: SSPageViewController {
             setViewControllers(viewControllers: viewControllers, tabView: tabView,  headerView: headerView)
         case .refresh:
             let viewControllers = titles.map({
-                title -> SSPageChildViewController in
+                title -> SSPageChildDelegate in
                 let vc = DemoViewController(text: "refresh: \(title)", hasRefresh: true)
                 return vc
             })
             isSupportHeaderRefresh = true
-            isSupportContainerScrollFooterRefresh = true
             setViewControllers(viewControllers: viewControllers, titles: titles, headerView: headerView)
             
         case .headerScale:
             let viewControllers = titles.map({
-                title -> SSPageChildViewController in
+                title -> SSPageChildDelegate in
                 let vc = DemoViewController(text: "headerScale: \(title)")
                 return vc
             })

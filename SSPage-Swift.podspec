@@ -18,6 +18,6 @@ spec.license      = "MIT"
 spec.author             = { "subai" => "804663401@qq.com" }
 spec.platform     = :ios, "9.0"
 spec.source       = { :git => "https://github.com/namesubai/SSPage-Swift.git", :tag => "1.0.3"}
-spec.source_files  = "SSPageViewController/SSPageViewController/Page/*.{swift}"
+spec.source_files  = "Sources/Page/*.{swift}"
 
 end

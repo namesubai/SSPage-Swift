@@ -4,6 +4,7 @@ platform :ios, '10.0'
 
 target 'SSPageViewController' do
   inhibit_all_warnings!
+  pod 'SSPage-Swift', :path => '../../../Page'
   pod 'SnapKit'
   pod 'MJRefresh'
 end

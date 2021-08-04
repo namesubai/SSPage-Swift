@@ -11,6 +11,7 @@ import MJRefresh
 class DemoViewController: UITableViewController {
     private var text: String
     private var hasRefresh: Bool
+    private var rowCount = 0
 
     init(text: String, hasRefresh: Bool = false) {
         self.text = text
@@ -22,26 +23,34 @@ class DemoViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "\(type(of: UITableViewCell.self))")
         if hasRefresh {
             tableView.mj_footer = MJRefreshAutoNormalFooter(refreshingBlock: {
+                self.rowCount += 20
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
                     self.tableView.mj_footer?.endRefreshing()
+                    self.tableView.reloadData()
                 }
             })
             tableView.mj_header = MJRefreshNormalHeader(refreshingBlock: {
+                self.rowCount = 20
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
                     self.tableView.mj_header?.endRefreshing()
+                    self.tableView.reloadData()
                 }
             })
         }
-        
         tableView.mj_header?.beginRefreshing()
-        
+        self.rowCount = Int.random(in: 20...100)
         // Do any additional setup after loading the view.
     }
+
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -56,7 +65,7 @@ class DemoViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Int.random(in: 20...40)
+        return self.rowCount
     }
     
    
@@ -77,13 +86,5 @@ extension DemoViewController: SSPageChildDelegate {
     func childContainerView() -> UIScrollView? {
         return tableView
     }
-    
-    func containerScrollFooterRefresh() {
-        print("底部触发")
-        tableView.mj_footer?.beginRefreshing()
-    }
-    
-    func containerScrollFooterIsCanRefresh() -> Bool {
-        return tableView.mj_footer!.state == .refreshing ? false : true
-    }
+  
 }
