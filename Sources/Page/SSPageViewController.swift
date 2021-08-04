@@ -384,12 +384,13 @@ open class SSPageViewController: UIViewController {
             
         } else {
             if keyPath == "contentOffset" {
-                if let newOffset = change?[.newKey] as? CGPoint {
+                if let newOffset = change?[.newKey] as? CGPoint, let OldOffset = change?[.oldKey] as? CGPoint, newOffset.y != OldOffset.y{
                     if let scrollView = object as? UIScrollView, scrollView == ((willTransitionToViewController ?? currentViewController) as? SSPageChildDelegate)?.childContainerView() {
 //                        print(newOffset.y)
                         self.contentOffsets[selectedPageNum] = newOffset.y
                         let topMargin = (tabView?.frame.height ?? 0) + (headerView?.frame.height ?? 0) + navigationBarAndStatusBarHeight
                         let scrollDistance = newOffset.y + topMargin
+//                        print(scrollDistance)
                         let frame = self.headerContainerView.frame
                         if self.headerView != nil && self.tabView != nil {
                             if let headerView = self.headerView as? SSPageHeaderDelegate {
@@ -419,6 +420,11 @@ open class SSPageViewController: UIViewController {
                             } else {
                                 if scrollDistance >= 0 {
                                     refreshScrollViewPosition(scrollView: ((willTransitionToViewController ?? currentViewController) as? SSPageChildDelegate)?.childContainerView())
+                                } else {
+                                    if abs(newOffset.y) > topMargin && isSupportHeaderRefresh {
+                                        self.headerContainerView.ss_y = self.navigationBarAndStatusBarHeight
+                                        self.headerView?.isHidden = false
+                                    }
                                 }
                                
                             }
@@ -440,12 +446,12 @@ open class SSPageViewController: UIViewController {
         }
         let topMargin = (tabView?.frame.height ?? 0) + (headerView?.frame.height ?? 0) + navigationBarAndStatusBarHeight
         let scrollDistance = scrollView.contentOffset.y + topMargin
+
         let minY = self.navigationBarAndStatusBarHeight - (self.headerContainerView.frame.height - self.tabView!.frame.height)
         if  self.headerContainerView.ss_y <= self.navigationBarAndStatusBarHeight,
             (self.headerContainerView.ss_y > minY || scrollDistance < self.headerContainerView.frame.height - self.tabView!.frame.height) {
             let lastPosition = abs(self.headerContainerView.ss_y - self.navigationBarAndStatusBarHeight)
             let topMargin = (tabView?.frame.height ?? 0) + (headerView?.frame.height ?? 0) + self.navigationBarAndStatusBarHeight
-            
             let newContentOffsetY = -topMargin + lastPosition
             if Int(scrollView.contentOffset.y) !=  Int(newContentOffsetY) {
                 scrollView.contentOffset = CGPoint(x: 0, y: newContentOffsetY)
