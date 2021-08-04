@@ -169,8 +169,8 @@ class CustomTabView: UIView, SSPageTabSelectedDelegate {
         backgroundColor = .white
         addSubview(segmentedControl)
         segmentedControl.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
-        for index in 0..<4 {
-            segmentedControl.insertSegment(withTitle: "seleted\(index)", at: index, animated: true)
+        for index in 0..<11 {
+            segmentedControl.insertSegment(withTitle: "\(index)", at: index, animated: true)
         }
         segmentedControl.addTarget(self, action: #selector(segmentedAction(segmented:)), for: .valueChanged)
         segmentedControl.selectedSegmentIndex = 0
