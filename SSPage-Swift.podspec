@@ -7,7 +7,7 @@
 
 Pod::Spec.new do |spec|
 spec.name         = "SSPage-Swift"
-spec.version      = "1.0.3"
+spec.version      = "1.0.5"
 spec.summary      = "使用UIPageViewController实现的简单易用的界面切换组件"
 spec.description  = <<-DESC
 使用UIPageViewController实现的简单易用的界面切换组件
@@ -17,7 +17,7 @@ spec.homepage     = "https://github.com/namesubai/SSPage-Swift.git"
 spec.license      = "MIT"
 spec.author             = { "subai" => "804663401@qq.com" }
 spec.platform     = :ios, "9.0"
-spec.source       = { :git => "https://github.com/namesubai/SSPage-Swift.git", :tag => "1.0.3"}
+spec.source       = { :git => "https://github.com/namesubai/SSPage-Swift.git", :tag => "#{spec.version}"}
 spec.source_files  = "Sources/Page/*.{swift}"
 
 end

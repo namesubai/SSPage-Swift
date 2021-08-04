@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import SSPage_Swift
 class CustomPageViewController: SSPageViewController {
     enum TabType {
         case `default`

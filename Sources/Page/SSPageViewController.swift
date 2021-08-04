@@ -283,7 +283,7 @@ open class SSPageViewController: UIViewController {
     private var isSelectedTranslate = false
     private var contentOffsets = [Int:CGFloat]()
     /// 支持下拉刷新
-    var isSupportHeaderRefresh: Bool = false
+    public var isSupportHeaderRefresh: Bool = false
     private(set) var selectedPageNum: Int = -1 {
         didSet {
             if selectedPageNum != oldValue {
@@ -298,7 +298,7 @@ open class SSPageViewController: UIViewController {
             }
         }
     }
-    var currentViewController: UIViewController? {
+    public var currentViewController: UIViewController? {
         if let currentViewControllers = currentViewControllers {
             if currentViewControllers.count > selectedPageNum && selectedPageNum !=  -1 {
                 return currentViewControllers[selectedPageNum]

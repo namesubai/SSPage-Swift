@@ -7,7 +7,7 @@
 
 import UIKit
 import MJRefresh
-
+import SSPage_Swift
 class DemoViewController: UITableViewController {
     private var text: String
     private var hasRefresh: Bool
