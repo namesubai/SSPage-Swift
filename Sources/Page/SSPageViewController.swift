@@ -279,11 +279,15 @@ open class SSPageViewController: UIViewController {
     private var tabView: (UIView & SSPageTabSelectedDelegate)?
     private lazy var headerView: UIView? = nil
     private var currentViewControllers: [UIViewController]? = nil
+    private var currentKVOViewControllers = [UIViewController]()
     private var willTransitionToViewController: UIViewController? = nil
     private var isSelectedTranslate = false
     private var contentOffsets = [Int:CGFloat]()
     /// 支持下拉刷新
     public var isSupportHeaderRefresh: Bool = false
+    /// 顶部间距
+    public var headerContainerTopMargin: CGFloat = -1
+
     private(set) var selectedPageNum: Int = -1 {
         didSet {
             if selectedPageNum != oldValue {
@@ -329,7 +333,7 @@ open class SSPageViewController: UIViewController {
             tabView.frame = CGRect(x: 0, y: topMargin, width: view.frame.width, height: tabView.frame.height)
             topMargin = tabView.frame.maxY
         }
-        headerContainerView.frame = CGRect(x: 0, y: self.navigationBarAndStatusBarHeight, width: view.frame.width, height: topMargin)
+        headerContainerView.frame = CGRect(x: 0, y: headerContainerTopMargin >= 0 ? headerContainerTopMargin : self.navigationBarAndStatusBarHeight, width: view.frame.width, height: topMargin)
         pageViewController.view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
     }
     
@@ -357,8 +361,13 @@ open class SSPageViewController: UIViewController {
             }
         }
         
-        (self.currentViewControllers ?? []).forEach { viewController in
-            configChildViewControlelr(viewController: viewController)
+        
+        (currentViewControllers ?? []).forEach { vc in
+            vc.viewDidLoadTrigger {
+                [weak self] in guard let self = self else { return }
+                self.willTransitionToViewController = vc
+                self.configChildViewControlelr(viewController: vc)
+            }
         }
     }
     
@@ -412,14 +421,20 @@ open class SSPageViewController: UIViewController {
                                 }
                                 if scrollDistance >= 0 {
                                     (self.currentViewControllers ?? []).filter({$0 != (willTransitionToViewController ?? currentViewController)}).forEach { [weak self] viewController in guard let self = self else { return }
-                                        self.refreshScrollViewPosition(scrollView: (viewController as? SSPageChildDelegate)?.childContainerView())
+                                        if viewController.isViewLoaded {
+                                            self.refreshScrollViewPosition(scrollView: (viewController as? SSPageChildDelegate)?.childContainerView())
+                                        }
+                                        
                                     }
                                 }
                               
                                 
                             } else {
                                 if scrollDistance >= 0 {
-                                    refreshScrollViewPosition(scrollView: ((willTransitionToViewController ?? currentViewController) as? SSPageChildDelegate)?.childContainerView())
+                                    if (willTransitionToViewController ?? currentViewController)?.isViewLoaded == true {
+                                        refreshScrollViewPosition(scrollView: ((willTransitionToViewController ?? currentViewController) as? SSPageChildDelegate)?.childContainerView())
+                                    }
+                                    
                                 } else {
                                     if abs(newOffset.y) > topMargin && isSupportHeaderRefresh {
                                         self.headerContainerView.ss_y = self.navigationBarAndStatusBarHeight
@@ -435,6 +450,7 @@ open class SSPageViewController: UIViewController {
                 }
                 
             }
+
         }
       
     }
@@ -444,7 +460,7 @@ open class SSPageViewController: UIViewController {
         guard let scrollView = scrollView else {
             return
         }
-        let topMargin = (tabView?.frame.height ?? 0) + (headerView?.frame.height ?? 0) + navigationBarAndStatusBarHeight
+        let topMargin = scrollView.contentInset.top
         let scrollDistance = scrollView.contentOffset.y + topMargin
 
         let minY = self.navigationBarAndStatusBarHeight - (self.headerContainerView.frame.height - self.tabView!.frame.height)
@@ -532,16 +548,32 @@ open class SSPageViewController: UIViewController {
     
     func configChildViewControlelr(viewController: UIViewController?) {
         if let viewController = viewController as? SSPageChildDelegate & UIViewController {
-            let topMargin = (tabView?.frame.height ?? 0) + (headerView?.frame.height ?? 0)
+            var topMargin = (tabView?.frame.height ?? 0) + (headerView?.frame.height ?? 0)
             if let scrollView = viewController.childContainerView() {
-                scrollView.addObserver(self, forKeyPath: "contentOffset", options: [.old, .new], context: nil)
+                if !currentKVOViewControllers.contains(viewController) {
+                    scrollView.addObserver(self, forKeyPath: "contentOffset", options: [.old, .new], context: nil)
+                    currentKVOViewControllers.append(viewController)
+                    if #available(iOS 11.0, *) {
+                        scrollView.contentInsetAdjustmentBehavior = .never
+                    } else {
+                        viewController.automaticallyAdjustsScrollViewInsets = false
+                    }
+                    
+                    var topHeight: CGFloat = 0
+                    if !UIApplication.shared.isStatusBarHidden {
+                        topHeight += UIApplication.shared.statusBarFrame.height
+                    }
+                    
+                    if viewController.navigationController?.navigationBar.isHidden == false {
+                        topHeight += viewController.navigationController?.navigationBar.frame.height ?? 0
+                    }
+                    topMargin += topHeight
+                    scrollView.contentInset = UIEdgeInsets(top: topMargin, left: 0, bottom: 0, right: 0)
+                    scrollView.scrollIndicatorInsets = UIEdgeInsets(top: topMargin - topHeight, left: 0, bottom: 0, right: 0)
+                    scrollView.contentOffset = CGPoint(x: 0, y: -scrollView.contentInset.top)
+                    refreshScrollViewPosition(scrollView: scrollView)
+                }
                 
-            }
-            if #available(iOS 11.0, *) {
-                viewController.additionalSafeAreaInsets = viewController.view.safeAreaInsets
-                viewController.additionalSafeAreaInsets = UIEdgeInsets(top: topMargin , left: 0, bottom: 0, right: 0)
-            } else {
-                viewController.topLayoutGuide.heightAnchor.constraint(equalToConstant: topMargin).isActive = true
             }
         }
     }
@@ -551,7 +583,7 @@ open class SSPageViewController: UIViewController {
         if let scrollView = self.pageScrollView {
             scrollView.removeObserver(self, forKeyPath: "contentOffset")
         }
-        (currentViewControllers ?? []).forEach { viewControlelr in
+        (currentKVOViewControllers ?? []).forEach { viewControlelr in
             if let childController = viewControlelr as? SSPageChildDelegate {
                 if let tableView = childController.childContainerView() {
                     tableView.removeObserver(self, forKeyPath: "contentOffset")
@@ -631,7 +663,7 @@ extension UIScrollView {
 
 extension UIViewController {
     var navigationBarAndStatusBarHeight: CGFloat {
-        return UIApplication.shared.statusBarFrame.height + (self.navigationController?.navigationBar.frame.height ?? 0)
+        return UIApplication.shared.statusBarFrame.height + (self.navigationController?.navigationBar.isHidden == true ? 0 : ((self.navigationController?.navigationBar.frame.height ?? 0)))
     }
 }
 
@@ -649,5 +681,6 @@ private extension UIView {
         }
     }
 }
+
 
 
