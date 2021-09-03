@@ -362,9 +362,9 @@ open class SSPageViewController: UIViewController {
         }
         
         
-        (currentViewControllers ?? []).forEach { vc in
+        (currentViewControllers ?? []).forEach {  vc in
             vc.viewDidLoadTrigger {
-                [weak self] in guard let self = self else { return }
+                [weak self, weak vc] in guard let self = self, let vc = vc else { return }
                 self.willTransitionToViewController = vc
                 self.configChildViewControlelr(viewController: vc)
             }
@@ -567,7 +567,9 @@ open class SSPageViewController: UIViewController {
                     if viewController.navigationController?.navigationBar.isHidden == false {
                         topHeight += viewController.navigationController?.navigationBar.frame.height ?? 0
                     }
-                    topMargin += topHeight
+                    if headerContainerTopMargin < 0 {
+                        topMargin += topHeight
+                    }
                     scrollView.contentInset = UIEdgeInsets(top: topMargin, left: 0, bottom: 0, right: 0)
                     scrollView.scrollIndicatorInsets = UIEdgeInsets(top: topMargin - topHeight, left: 0, bottom: 0, right: 0)
                     scrollView.contentOffset = CGPoint(x: 0, y: -scrollView.contentInset.top)
@@ -681,6 +683,7 @@ private extension UIView {
         }
     }
 }
+
 
 
 
