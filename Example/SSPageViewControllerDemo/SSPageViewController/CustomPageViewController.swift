@@ -14,6 +14,7 @@ class CustomPageViewController: SSPageViewController {
         case refresh
         case headerScale
         case noHeader
+        case noTab
     }
     private var tabType: TabType
     private var titles = ["select1", "select2", "select3", "select4", "select5", "select6", "select7", "select8", "select9", "select10", "select11"]
@@ -71,6 +72,15 @@ class CustomPageViewController: SSPageViewController {
             })
             let headerView = CustomImageHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 350))
             setViewControllers(viewControllers: viewControllers, titles: titles, headerView: headerView)
+            
+        case .noTab:
+            let viewControllers = titles.map({
+                title -> SSPageChildDelegate in
+                let vc = DemoViewController(text: "headerScale: \(title)")
+                return vc
+            })
+            isAddTabViewToSuperView = false
+            setViewControllers(viewControllers: viewControllers, titles: titles, headerView: nil)
             
         }
         // Do any additional setup after loading the view.

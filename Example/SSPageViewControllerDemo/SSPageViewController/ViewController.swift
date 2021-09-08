@@ -16,7 +16,8 @@ class ViewController: UITableViewController {
                  ("默认Tab", #selector(defaultTabs)),
                  ("自定义Tab", #selector(customTabs)),
                  ("支持下拉刷新", #selector(refresh)),
-                 ("头部图片扩大", #selector(headerViewScale))]
+                 ("头部图片扩大", #selector(headerViewScale)),
+                 ("没有header，没有Tab", #selector(noHeaderNoTab))]
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "\(type(of: UITableViewCell.self))")
         // Do any additional setup after loading the view.
     }
@@ -44,6 +45,11 @@ class ViewController: UITableViewController {
     
     @objc func headerViewScale() {
         let vc = CustomPageViewController(tabType: .headerScale)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func noHeaderNoTab() {
+        let vc = CustomPageViewController(tabType: .noTab)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

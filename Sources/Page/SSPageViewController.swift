@@ -265,6 +265,7 @@ open class SSPageViewController: UIViewController {
 
     private lazy var pageViewController: UIPageViewController = {
         let pageController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        pageController.isDoubleSided = false
         pageController.delegate = self
         pageController.dataSource = self
         return pageController
@@ -287,6 +288,7 @@ open class SSPageViewController: UIViewController {
     public var isSupportHeaderRefresh: Bool = false
     /// 顶部间距
     public var headerContainerTopMargin: CGFloat = -1
+    public var isAddTabViewToSuperView: Bool = true
 
     private(set) var selectedPageNum: Int = -1 {
         didSet {
@@ -329,7 +331,7 @@ open class SSPageViewController: UIViewController {
             headerView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: headerView.frame.height)
             topMargin = headerView.frame.maxY
         }
-        if let tabView = self.tabView {
+        if let tabView = self.tabView , isAddTabViewToSuperView {
             tabView.frame = CGRect(x: 0, y: topMargin, width: view.frame.width, height: tabView.frame.height)
             topMargin = tabView.frame.maxY
         }
@@ -350,7 +352,7 @@ open class SSPageViewController: UIViewController {
         if let headerView = self.headerView {
             headerContainerView.addSubview(headerView)
         }
-        if let tabView = self.tabView {
+        if let tabView = self.tabView, isAddTabViewToSuperView {
             headerContainerView.addSubview(tabView)
         }
         
@@ -397,7 +399,7 @@ open class SSPageViewController: UIViewController {
                     if let scrollView = object as? UIScrollView, scrollView == ((willTransitionToViewController ?? currentViewController) as? SSPageChildDelegate)?.childContainerView() {
 //                        print(newOffset.y)
                         self.contentOffsets[selectedPageNum] = newOffset.y
-                        let topMargin = (tabView?.frame.height ?? 0) + (headerView?.frame.height ?? 0) + navigationBarAndStatusBarHeight
+                        let topMargin = (isAddTabViewToSuperView ? (tabView?.frame.height ?? 0) + (headerView?.frame.height ?? 0) : 0 ) + navigationBarAndStatusBarHeight
                         let scrollDistance = newOffset.y + topMargin
 //                        print(scrollDistance)
                         let frame = self.headerContainerView.frame
@@ -410,8 +412,8 @@ open class SSPageViewController: UIViewController {
                                 if isSupportHeaderRefresh, scrollDistance < 0 {
                                     self.headerContainerView.ss_y = self.navigationBarAndStatusBarHeight
                                 } else {
-                                    if scrollDistance >= frame.height - self.tabView!.frame.height  {
-                                        self.headerContainerView.ss_y = self.navigationBarAndStatusBarHeight - (frame.height - self.tabView!.frame.height)
+                                    if scrollDistance >= frame.height - (isAddTabViewToSuperView ? self.tabView!.frame.height : 0)  {
+                                        self.headerContainerView.ss_y = self.navigationBarAndStatusBarHeight - (frame.height - (isAddTabViewToSuperView ? self.tabView!.frame.height : 0))
                                         self.headerView?.isHidden = true
                                     } else {
                                         self.headerContainerView.ss_y = self.navigationBarAndStatusBarHeight - scrollDistance
@@ -463,11 +465,11 @@ open class SSPageViewController: UIViewController {
         let topMargin = scrollView.contentInset.top
         let scrollDistance = scrollView.contentOffset.y + topMargin
 
-        let minY = self.navigationBarAndStatusBarHeight - (self.headerContainerView.frame.height - self.tabView!.frame.height)
+        let minY = self.navigationBarAndStatusBarHeight - (self.headerContainerView.frame.height - (isAddTabViewToSuperView ? self.tabView!.frame.height : 0))
         if  self.headerContainerView.ss_y <= self.navigationBarAndStatusBarHeight,
-            (self.headerContainerView.ss_y > minY || scrollDistance < self.headerContainerView.frame.height - self.tabView!.frame.height) {
+            (self.headerContainerView.ss_y > minY || scrollDistance < self.headerContainerView.frame.height - (isAddTabViewToSuperView ? self.tabView!.frame.height : 0)) {
             let lastPosition = abs(self.headerContainerView.ss_y - self.navigationBarAndStatusBarHeight)
-            let topMargin = (tabView?.frame.height ?? 0) + (headerView?.frame.height ?? 0) + self.navigationBarAndStatusBarHeight
+            let topMargin = (isAddTabViewToSuperView ? (tabView?.frame.height ?? 0) : 0 ) + (headerView?.frame.height ?? 0) + self.navigationBarAndStatusBarHeight
             let newContentOffsetY = -topMargin + lastPosition
             if Int(scrollView.contentOffset.y) !=  Int(newContentOffsetY) {
                 scrollView.contentOffset = CGPoint(x: 0, y: newContentOffsetY)
@@ -548,7 +550,7 @@ open class SSPageViewController: UIViewController {
     
     func configChildViewControlelr(viewController: UIViewController?) {
         if let viewController = viewController as? SSPageChildDelegate & UIViewController {
-            var topMargin = (tabView?.frame.height ?? 0) + (headerView?.frame.height ?? 0)
+            var topMargin = (isAddTabViewToSuperView ? (tabView?.frame.height ?? 0) : 0) + (headerView?.frame.height ?? 0)
             if let scrollView = viewController.childContainerView() {
                 if !currentKVOViewControllers.contains(viewController) {
                     scrollView.addObserver(self, forKeyPath: "contentOffset", options: [.old, .new], context: nil)
@@ -618,7 +620,10 @@ extension SSPageViewController: UIPageViewControllerDataSource, UIPageViewContro
     
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         ///向后
-        guard let viewControllers = self.currentViewControllers else {
+        print("======")
+
+        guard let viewControllers = self.currentViewControllers, pageScrollView?.isDecelerating == false else {
+            /// 判断是否放开手，（这里如果快速滑动会调用两次）
             return nil
         }
         if let index = viewControllers.firstIndex(of: viewController) {
