@@ -337,6 +337,7 @@ open class SSPageViewController: UIViewController {
         }
         headerContainerView.frame = CGRect(x: 0, y: headerContainerTopMargin >= 0 ? headerContainerTopMargin : self.navigationBarAndStatusBarHeight, width: view.frame.width, height: topMargin)
         pageViewController.view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
+        configChildViewControlelr(viewController: currentViewController)
     }
     
     open override func viewDidLoad() {
@@ -555,29 +556,29 @@ open class SSPageViewController: UIViewController {
                 if !currentKVOViewControllers.contains(viewController) {
                     scrollView.addObserver(self, forKeyPath: "contentOffset", options: [.old, .new], context: nil)
                     currentKVOViewControllers.append(viewController)
-                    if #available(iOS 11.0, *) {
-                        scrollView.contentInsetAdjustmentBehavior = .never
-                    } else {
-                        viewController.automaticallyAdjustsScrollViewInsets = false
-                    }
                     
-                    var topHeight: CGFloat = 0
-                    if !UIApplication.shared.isStatusBarHidden {
-                        topHeight += UIApplication.shared.statusBarFrame.height
-                    }
-                    
-                    if viewController.navigationController?.navigationBar.isHidden == false {
-                        topHeight += viewController.navigationController?.navigationBar.frame.height ?? 0
-                    }
-                    if headerContainerTopMargin < 0 {
-                        topMargin += topHeight
-                    }
-                    scrollView.contentInset = UIEdgeInsets(top: topMargin, left: 0, bottom: 0, right: 0)
-                    scrollView.scrollIndicatorInsets = UIEdgeInsets(top: topMargin - topHeight, left: 0, bottom: 0, right: 0)
-                    scrollView.contentOffset = CGPoint(x: 0, y: -scrollView.contentInset.top)
-                    refreshScrollViewPosition(scrollView: scrollView)
+                }
+                if #available(iOS 11.0, *) {
+                    scrollView.contentInsetAdjustmentBehavior = .never
+                } else {
+                    viewController.automaticallyAdjustsScrollViewInsets = false
                 }
                 
+                var topHeight: CGFloat = 0
+                if !UIApplication.shared.isStatusBarHidden {
+                    topHeight += UIApplication.shared.statusBarFrame.height
+                }
+                
+                if navigationController?.navigationBar.isHidden == false {
+                    topHeight += navigationController?.navigationBar.frame.height ?? 0
+                }
+                if headerContainerTopMargin < 0 {
+                    topMargin += topHeight
+                }
+                scrollView.contentInset = UIEdgeInsets(top: topMargin, left: 0, bottom: 0, right: 0)
+                scrollView.scrollIndicatorInsets = UIEdgeInsets(top: topMargin - topHeight, left: 0, bottom: 0, right: 0)
+                scrollView.contentOffset = CGPoint(x: 0, y: -scrollView.contentInset.top)
+                refreshScrollViewPosition(scrollView: scrollView)
             }
         }
     }
@@ -688,6 +689,8 @@ private extension UIView {
         }
     }
 }
+
+
 
 
 
