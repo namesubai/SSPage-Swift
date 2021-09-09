@@ -7,7 +7,7 @@
 
 Pod::Spec.new do |spec|
 spec.name         = "SSPage-Swift"
-spec.version      = "1.0.9"
+spec.version      = "1.0.10"
 spec.summary      = "使用UIPageViewController实现的简单易用的界面切换组件"
 spec.description  = <<-DESC
 使用UIPageViewController实现的简单易用的界面切换组件

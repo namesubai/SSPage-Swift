@@ -289,6 +289,7 @@ open class SSPageViewController: UIViewController {
     /// 顶部间距
     public var headerContainerTopMargin: CGFloat = -1
     public var isAddTabViewToSuperView: Bool = true
+    public var isHasTabBar: Bool = false
 
     private(set) var selectedPageNum: Int = -1 {
         didSet {
@@ -343,6 +344,11 @@ open class SSPageViewController: UIViewController {
     open override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+    }
+    
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        configChildViewControlelr(viewController: currentViewController)
     }
     
     private func makeUI() {
@@ -453,7 +459,6 @@ open class SSPageViewController: UIViewController {
                 }
                 
             }
-
         }
       
     }
@@ -575,7 +580,12 @@ open class SSPageViewController: UIViewController {
                 if headerContainerTopMargin < 0 {
                     topMargin += topHeight
                 }
-                scrollView.contentInset = UIEdgeInsets(top: topMargin, left: 0, bottom: 0, right: 0)
+                var bottomMargin: CGFloat = 0
+                if isHasTabBar {
+                    bottomMargin = tabBarController?.tabBar.frame.height ?? 0
+                }
+                
+                scrollView.contentInset = UIEdgeInsets(top: topMargin, left: 0, bottom: bottomMargin, right: 0)
                 scrollView.scrollIndicatorInsets = UIEdgeInsets(top: topMargin - topHeight, left: 0, bottom: 0, right: 0)
                 scrollView.contentOffset = CGPoint(x: 0, y: -scrollView.contentInset.top)
                 refreshScrollViewPosition(scrollView: scrollView)
@@ -621,7 +631,6 @@ extension SSPageViewController: UIPageViewControllerDataSource, UIPageViewContro
     
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         ///向后
-        print("======")
 
         guard let viewControllers = self.currentViewControllers, pageScrollView?.isDecelerating == false else {
             /// 判断是否放开手，（这里如果快速滑动会调用两次）
