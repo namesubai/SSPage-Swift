@@ -497,7 +497,7 @@ open class SSPageViewController: UIViewController {
         self.headerView = headerView
         self.tabView = tabView
         self.currentViewControllers = viewControllers as? [UIViewController]
-        tabView.selectTab(index: 0)
+        self.selectedPageNum = 0
         makeUI()
         if viewControllers.count > 0 {
             let toViewController = viewControllers.first! as! UIViewController
@@ -580,8 +580,10 @@ open class SSPageViewController: UIViewController {
                 if headerContainerTopMargin < 0 {
                     topMargin += topHeight
                 }
+                
                 var bottomMargin: CGFloat = 0
                 if isHasTabBar {
+                    
                     bottomMargin = tabBarController?.tabBar.frame.height ?? 0
                 }
                 
