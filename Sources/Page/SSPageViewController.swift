@@ -290,7 +290,7 @@ open class SSPageViewController: UIViewController {
     public var headerContainerTopMargin: CGFloat = -1
     public var isAddTabViewToSuperView: Bool = true
     public var isHasTabBar: Bool = false
-
+    public var isTabPinToVisibleBounds: Bool = true
     private(set) var selectedPageNum: Int = -1 {
         didSet {
             if selectedPageNum != oldValue {
@@ -416,13 +416,15 @@ open class SSPageViewController: UIViewController {
                             }
                             
                             if scrollView.isDragging || scrollView.isDecelerating {
+                        
                                 if isSupportHeaderRefresh, scrollDistance < 0 {
                                     self.headerContainerView.ss_y = self.navigationBarAndStatusBarHeight
                                 } else {
-                                    if scrollDistance >= frame.height - (isAddTabViewToSuperView ? self.tabView!.frame.height : 0)  {
+                                    if scrollDistance >= frame.height - (isAddTabViewToSuperView ? self.tabView!.frame.height : 0) && !isTabPinToVisibleBounds {
                                         self.headerContainerView.ss_y = self.navigationBarAndStatusBarHeight - (frame.height - (isAddTabViewToSuperView ? self.tabView!.frame.height : 0))
                                         self.headerView?.isHidden = true
                                     } else {
+                            
                                         self.headerContainerView.ss_y = self.navigationBarAndStatusBarHeight - scrollDistance
                                         self.headerView?.isHidden = false
                                     }
