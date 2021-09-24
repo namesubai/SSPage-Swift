@@ -290,6 +290,7 @@ open class SSPageViewController: UIViewController {
     public var headerContainerTopMargin: CGFloat = -1
     public var isAddTabViewToSuperView: Bool = true
     public var isHasTabBar: Bool = false
+    /// 是否开启tab悬浮，默认开启
     public var isTabPinToVisibleBounds: Bool = true
     private(set) var selectedPageNum: Int = -1 {
         didSet {
@@ -373,7 +374,7 @@ open class SSPageViewController: UIViewController {
         
         (currentViewControllers ?? []).forEach {  vc in
             vc.viewDidLoadTrigger {
-                [weak self, weak vc] in guard let self = self, let vc = vc else { return }
+                [weak self, weak vc] in guard let self = self, let vc = vc, vc == self.willTransitionToViewController else { return }
                 self.willTransitionToViewController = vc
                 self.configChildViewControlelr(viewController: vc)
             }
@@ -420,7 +421,7 @@ open class SSPageViewController: UIViewController {
                                 if isSupportHeaderRefresh, scrollDistance < 0 {
                                     self.headerContainerView.ss_y = self.navigationBarAndStatusBarHeight
                                 } else {
-                                    if scrollDistance >= frame.height - (isAddTabViewToSuperView ? self.tabView!.frame.height : 0) && !isTabPinToVisibleBounds {
+                                    if scrollDistance >= frame.height - (isAddTabViewToSuperView ? self.tabView!.frame.height : 0) && isTabPinToVisibleBounds {
                                         self.headerContainerView.ss_y = self.navigationBarAndStatusBarHeight - (frame.height - (isAddTabViewToSuperView ? self.tabView!.frame.height : 0))
                                         self.headerView?.isHidden = true
                                     } else {
@@ -591,7 +592,7 @@ open class SSPageViewController: UIViewController {
                 
                 scrollView.contentInset = UIEdgeInsets(top: topMargin, left: 0, bottom: bottomMargin, right: 0)
                 scrollView.scrollIndicatorInsets = UIEdgeInsets(top: topMargin - topHeight, left: 0, bottom: 0, right: 0)
-                scrollView.contentOffset = CGPoint(x: 0, y: -scrollView.contentInset.top)
+//                scrollView.contentOffset = CGPoint(x: 0, y: -scrollView.contentInset.top)
                 refreshScrollViewPosition(scrollView: scrollView)
             }
         }
@@ -636,8 +637,7 @@ extension SSPageViewController: UIPageViewControllerDataSource, UIPageViewContro
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         ///向后
 
-        guard let viewControllers = self.currentViewControllers, pageScrollView?.isDecelerating == false else {
-            /// 判断是否放开手，（这里如果快速滑动会调用两次）
+        guard let viewControllers = self.currentViewControllers else {
             return nil
         }
         if let index = viewControllers.firstIndex(of: viewController) {
