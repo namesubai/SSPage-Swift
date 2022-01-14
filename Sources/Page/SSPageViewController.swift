@@ -288,7 +288,11 @@ open class SSPageViewController: UIViewController {
     public var isSupportHeaderRefresh: Bool = false
     /// 顶部间距
     public var headerContainerTopMargin: CGFloat = -1
+    /// tabview是否添加到sspage框架的父视图
     public var isAddTabViewToSuperView: Bool = true
+    /// isAddTabViewToSuperView = false && scrollContentTopInsetsWhenNotAddSuperView > 0，设置才有效果
+    public var scrollContentTopInsetsWhenNotAddSuperView: CGFloat = -1
+
     public var isHasTabBar: Bool = false
     /// 是否开启tab悬浮，默认开启
     public var isTabPinToVisibleBounds: Bool = true
@@ -571,15 +575,22 @@ open class SSPageViewController: UIViewController {
                 } else {
                     viewController.automaticallyAdjustsScrollViewInsets = false
                 }
-                
                 var topHeight: CGFloat = 0
-                if !UIApplication.shared.isStatusBarHidden {
-                    topHeight += UIApplication.shared.statusBarFrame.height
+
+                if !isAddTabViewToSuperView && scrollContentTopInsetsWhenNotAddSuperView > 0{
+                    topHeight = scrollContentTopInsetsWhenNotAddSuperView
+                } else {
+                    
+                    if !UIApplication.shared.isStatusBarHidden {
+                        topHeight += UIApplication.shared.statusBarFrame.height
+                    }
+                    
+                    if navigationController?.navigationBar.isHidden == false {
+                        topHeight += navigationController?.navigationBar.frame.height ?? 0
+                    }
                 }
                 
-                if navigationController?.navigationBar.isHidden == false {
-                    topHeight += navigationController?.navigationBar.frame.height ?? 0
-                }
+                
                 if headerContainerTopMargin < 0 {
                     topMargin += topHeight
                 }
@@ -702,9 +713,3 @@ private extension UIView {
         }
     }
 }
-
-
-
-
-
-
