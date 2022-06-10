@@ -371,8 +371,9 @@ open class SSPageViewController: UIViewController {
         if  let scrollView = pageScrollView {
             if let panGestureRecognizer = self.navigationController?.interactivePopGestureRecognizer {
                 scrollView.panGestureRecognizer.require(toFail: panGestureRecognizer)
-                scrollView.addObserver(self, forKeyPath: "contentOffset", options: [.old, .new], context: nil)
             }
+            scrollView.addObserver(self, forKeyPath: "contentOffset", options: [.old, .new], context: nil)
+            
         }
         
         
@@ -393,10 +394,10 @@ open class SSPageViewController: UIViewController {
                         if let currentViewController = currentViewController {
                             if let superView = currentViewController.view.superview {
                                 let convertFrame = superView.convert(currentViewController.view.frame, to: view)
-//                                if convertFrame.minX != 0 {
-                                    let progress = -convertFrame.minX / view.bounds.width
-                                    tabView?.dragProgressDidChange(progress: progress)
-//                                }
+                                //                                if convertFrame.minX != 0 {
+                                let progress = -convertFrame.minX / view.bounds.width
+                                tabView?.dragProgressDidChange(progress: progress)
+                                //                                }
                             }
                             
                         }
@@ -713,4 +714,5 @@ private extension UIView {
         }
     }
 }
+
 
