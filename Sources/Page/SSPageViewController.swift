@@ -296,6 +296,7 @@ open class SSPageViewController: UIViewController {
     public var isHasTabBar: Bool = false
     /// 是否开启tab悬浮，默认开启
     public var isTabPinToVisibleBounds: Bool = true
+    private var recordChildVCIsFirstSetContentOffset = [UIViewController : Bool]()
     private(set) var selectedPageNum: Int = -1 {
         didSet {
             if selectedPageNum != oldValue {
@@ -604,7 +605,11 @@ open class SSPageViewController: UIViewController {
                 
                 scrollView.contentInset = UIEdgeInsets(top: topMargin, left: 0, bottom: bottomMargin, right: 0)
                 scrollView.scrollIndicatorInsets = UIEdgeInsets(top: topMargin - topHeight, left: 0, bottom: 0, right: 0)
-                //                scrollView.contentOffset = CGPoint(x: 0, y: -scrollView.contentInset.top)
+                
+                if recordChildVCIsFirstSetContentOffset[viewController] != true {
+                    scrollView.contentOffset = CGPoint(x: 0, y: -scrollView.contentInset.top)
+                }
+                recordChildVCIsFirstSetContentOffset[viewController] = true
                 refreshScrollViewPosition(scrollView: scrollView)
             }
         }
