@@ -287,11 +287,11 @@ open class SSPageViewController: UIViewController {
     /// 支持下拉刷新
     public var isSupportHeaderRefresh: Bool = false
     /// 顶部间距
-    public var headerContainerTopMargin: CGFloat = -1
+    public var headerContainerTopMargin: CGFloat?
     /// tabview是否添加到sspage框架的父视图
     public var isAddTabViewToSuperView: Bool = true
     /// isAddTabViewToSuperView = false && scrollContentTopInsetsWhenNotAddSuperView > 0，设置才有效果
-    public var scrollContentTopInsetsWhenNotAddSuperView: CGFloat = -1
+    public var scrollContentTopInsetsWhenNotAddSuperView: CGFloat?
     
     public var isHasTabBar: Bool = false
     /// 是否开启tab悬浮，默认开启
@@ -342,7 +342,7 @@ open class SSPageViewController: UIViewController {
             tabView.frame = CGRect(x: 0, y: topMargin, width: view.frame.width, height: tabView.frame.height)
             topMargin = tabView.frame.maxY
         }
-        headerContainerView.frame = CGRect(x: 0, y: headerContainerTopMargin >= 0 ? headerContainerTopMargin : self.navigationBarAndStatusBarHeight, width: view.frame.width, height: topMargin)
+        headerContainerView.frame = CGRect(x: 0, y: headerContainerTopMargin ?? self.navigationBarAndStatusBarHeight, width: view.frame.width, height: topMargin)
         pageViewController.view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
         configChildViewControlelr(viewController: currentViewController)
     }
@@ -579,8 +579,8 @@ open class SSPageViewController: UIViewController {
                 }
                 var topHeight: CGFloat = 0
                 
-                if !isAddTabViewToSuperView && scrollContentTopInsetsWhenNotAddSuperView > 0{
-                    topHeight = scrollContentTopInsetsWhenNotAddSuperView
+                if !isAddTabViewToSuperView && scrollContentTopInsetsWhenNotAddSuperView != nil {
+                    topHeight = scrollContentTopInsetsWhenNotAddSuperView!
                 } else {
                     
                     if !UIApplication.shared.isStatusBarHidden {
@@ -593,7 +593,7 @@ open class SSPageViewController: UIViewController {
                 }
                 
                 
-                if headerContainerTopMargin < 0 {
+                if headerContainerTopMargin == nil {
                     topMargin += topHeight
                 }
                 
@@ -719,5 +719,7 @@ private extension UIView {
         }
     }
 }
+
+
 
 
